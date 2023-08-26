@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const { buildSchema } = require('graphql');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -59,6 +61,14 @@ app.use('/graphql', graphqlHttp.graphqlHTTP({
     graphiql: true
 }));
 
-app.listen(3003, () => {
-    console.log(`Server listening at http://localhost:3003`);
+
+mongoose.connect(process.env.MONGO_URI)
+.then(()=>{
+    app.listen(3003, () => {
+        console.log(`Server listening at http://localhost:3003`);
+    });
+})
+.catch(err=>{
+    console.log(err);
 });
+
