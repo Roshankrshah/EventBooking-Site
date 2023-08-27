@@ -45,14 +45,18 @@ form.addEventListener('submit', (e) => {
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(res => {
-        if (res.status !== 200 && res.status !== 201) {
-            throw new Error('Failed!');
-        }
-        return res.json();
     })
+        .then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        })
         .then(resData => {
             console.log(resData);
+            localStorage.setItem('token', resData.data.login.token);
+            localStorage.setItem('userId', resData.data.login.userId);
+            localStorage.setItem('tokenExpiration',resData.data.login.tokenExpiration);
         })
         .catch(err => {
             console.log(err);
