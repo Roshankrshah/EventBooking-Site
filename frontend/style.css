@@ -1,0 +1,17 @@
+.login-container{
+    box-sizing: border-box;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: auto;
+}
+
+.signup-container{
+    box-sizing: border-box;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: auto;
+}
+
+.form-control{
+    width: 50%;
+}
