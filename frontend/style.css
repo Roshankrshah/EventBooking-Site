@@ -69,6 +69,23 @@
     gap: 2px;
 }
 
+.bookings_list{
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    width: 40rem;
+    max-width: 90%;
+}
+
+.bookings_item{
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border: 1px solid blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .event-form-control label,
 .event-form-control input,
 .event-form-control textarea{
@@ -116,5 +133,17 @@ div h3{
 }
 
 .viewbtn:hover{
+    background-color: rgb(96, 96, 228);
+}
+
+.cancel_booking-btn{
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    transition: all 0.3s ease;
+}
+
+.cancel_booking-btn:hover{
     background-color: rgb(96, 96, 228);
 }
