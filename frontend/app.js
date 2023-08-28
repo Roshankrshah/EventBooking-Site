@@ -3,9 +3,9 @@ const inputPassword = document.getElementById('InputPassword');
 const loginForm = document.querySelector('.login-container');
 const signupForm = document.querySelector('.signup-container');
 
-let form = loginForm;
-if (loginForm === null) {
-    form = signupForm;
+let form = signupForm;
+if (loginForm !== null) {
+    form = loginForm;
 }
 
 form.addEventListener('submit', (e) => {
@@ -57,6 +57,8 @@ form.addEventListener('submit', (e) => {
             localStorage.setItem('token', resData.data.login.token);
             localStorage.setItem('userId', resData.data.login.userId);
             localStorage.setItem('tokenExpiration',resData.data.login.tokenExpiration);
+
+            window.location.replace("http://127.0.0.1:5500/frontend/events.html");
         })
         .catch(err => {
             console.log(err);
