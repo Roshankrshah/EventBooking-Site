@@ -1,3 +1,4 @@
+const listContainer = document.querySelector('.booked_events_list');
 
 const requestBody = {
     query:`
@@ -32,6 +33,15 @@ const token = localStorage.getItem('token');
         })
         .then(resData => {
             console.log(resData);
+            const listEle = document.createElement('li');
+            listEle.classList.add('booked_list-item');
+            const innerEle = resData.data.bookings.map(booking=>{
+                return `
+                    <p>${booking.event.title}<span> - </span> ${new Date(booking.createdAt).toLocaleDateString()}</p>
+                `;
+            }).join('');
+            
+            listContainer.innerHTML = innerEle;
         })
         .catch(err => {
             console.log(err);
