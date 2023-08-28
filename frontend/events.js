@@ -170,14 +170,56 @@ const openViewModal = (event) => {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary viewclose-btn" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary confirm-btn">Confirm</button>
+                <button type="button" class="btn btn-primary book-btn">Book</button>
             </div>
         </div>
     </div>`;
     listContainer.appendChild(viewModal);
     let viewcloseBtn = document.querySelector(".viewclose-btn");
+    let bookBtn = document.querySelector(".book-btn");
 
     viewcloseBtn.addEventListener("click", () => {
+        listContainer.removeChild(viewModal);
+    });
+
+    bookBtn.addEventListener('click', () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            listContainer.removeChild(viewModal);
+            return;
+        }
+        const bookBody = {
+            query: `
+            mutation{
+                bookEvent(eventId:"${parsed._id}"){
+                    _id
+                    createdAt
+                    updatedAt
+                }
+            }`
+        };
+
+        fetch('http://localhost:3003/graphql', {
+            method: 'POST',
+            body: JSON.stringify(bookBody),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+            .then(res => {
+                if (res.status !== 200 && res.status !== 201) {
+                    throw new Error('Failed!');
+                }
+                return res.json();
+            })
+            .then(resData => {
+                console.log(resData);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        
         listContainer.removeChild(viewModal);
     });
 }
