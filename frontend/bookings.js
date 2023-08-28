@@ -1,4 +1,10 @@
 const listContainer = document.querySelector('.bookings_list');
+const logoutBtn = document.querySelector('.logoutBtn');
+
+logoutBtn.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.replace("http://127.0.0.1:5500/frontend/login.html");
+});
 
 const requestBody = {
     query: `
