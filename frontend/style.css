@@ -98,4 +98,23 @@
     margin:1rem 0;
     padding: 1rem;
     border: 1px solid blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+div h3{
+    color: blue;
+}
+
+.viewbtn{
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 5px 5px;
+    transition: all 0.3s ease;
+}
+
+.viewbtn:hover{
+    background-color: rgb(96, 96, 228);
 }

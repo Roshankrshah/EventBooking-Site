@@ -34,11 +34,11 @@ confirmBtn.addEventListener('click', () => {
         price <= 0 ||
         description.trim().length === 0 ||
         date.trim().length === 0
-    ){
+    ) {
         alert('Fields cannot be Empty!!!')
         return;
     }
-    const event = {title,price,description,date};
+    const event = { title, price, description, date };
     console.log(event);
 
     const requestBody = {
@@ -50,36 +50,44 @@ confirmBtn.addEventListener('click', () => {
                     description
                     date
                     price
-                    creator{
-                        _id
-                        email
-                    }
                 }
             }`
     };
 
     const token = localStorage.getItem('token');
 
-    fetch('http://localhost:3003/graphql',{
+    fetch('http://localhost:3003/graphql', {
         method: 'POST',
         body: JSON.stringify(requestBody),
-        headers:{
-            'Content-Type' : 'application/json',
-            'Authorization' : 'Bearer ' + token
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         }
     })
-    .then(res=>{
-        if (res.status !== 200 && res.status !== 201) {
-            throw new Error('Failed!');
-        }
-        return res.json();
-    })
-    .then(resData => {
-        console.log(resData);
-    })
-    .catch(err=>{
-        console.log(err);
-    })
+        .then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed!');
+            }
+            return res.json();
+        })
+        .then(resData => {
+            console.log(resData);
+            const listEle = document.createElement('li');
+            listEle.classList.add('events_list-item');
+
+            listEle.innerHTML = `
+            <div>
+                <h3>${resData.data.createEvent.title}<h3>
+                <h6> ₹${resData.data.createEvent.price}<span> - </span> ${new Date(resData.data.createEvent.date).toLocaleDateString()}<h6>
+            </div>
+            <div>
+                <button class="viewbtn"> View Details</button>
+            </div>`;
+            listContainer.appendChild(listEle);
+        })
+        .catch(err => {
+            console.log(err);
+        })
 
     modal.classList.remove("open-modal");
 })
@@ -106,33 +114,72 @@ const requestBody = {
 };
 
 let eventList;
-fetch('http://localhost:3003/graphql',{
+const listContainer = document.querySelector('.events_list');
+let viewBtn;
+fetch('http://localhost:3003/graphql', {
     method: 'POST',
     body: JSON.stringify(requestBody),
-    headers:{
-        'Content-Type' : 'application/json',
+    headers: {
+        'Content-Type': 'application/json',
     }
 })
-.then(res=>{
-    if (res.status !== 200 && res.status !== 201) {
-        throw new Error('Failed!');
-    }
-    return res.json();
-})
-.then(resData => {
-    let events = resData.data.events;
-    eventList = events.map(event=>{
-        return `<li class="events_list-item">${event.title}</li>`
-    }).join('');
-    console.log(eventList)
-    const listContainer = document.querySelector('.events_list');
-    listContainer.innerHTML = eventList;
-})
-.catch(err=>{
-    console.log(err);
-});
+    .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+            throw new Error('Failed!');
+        }
+        return res.json();
+    })
+    .then(resData => {
+        let events = resData.data.events;
+        eventList = events.map(event => {
+            const stringEvent = btoa(JSON.stringify(event));
+            const innerEle = `<li class="events_list-item">
+            <div>
+                <h3>${event.title}<h3>
+                <h6> ₹${event.price}<span> - </span> ${new Date(event.date).toLocaleDateString()}<h6>
+            </div>
+            <div>
+                <button class="viewbtn" onclick="openViewModal('${stringEvent}')"> View Details</button>
+            </div>
+        </li>`
+            return innerEle;
+        }).join('');
+        listContainer.innerHTML = eventList;
+
+    })
+    .catch(err => {
+        console.log(err);
+    });
 
 
+const openViewModal = (event) => {
+    const parsed = JSON.parse(atob(event));
+    const viewModal = document.createElement('div');
+    viewModal.classList.add('modal-overlay');
+    viewModal.classList.add('open-modal');
+    viewModal.innerHTML = `
+    <div class="modal-container">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">${parsed.title}</h5>
+            </div>
+            <div class="modal-body">
+                <h2>${parsed.title}</h2>
+                <h5>${new Date(parsed.date).toLocaleDateString()}</h5>
+                <p>${parsed.description}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary viewclose-btn" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>`;
+    listContainer.appendChild(viewModal);
+    let viewcloseBtn = document.querySelector(".viewclose-btn");
 
+    viewcloseBtn.addEventListener("click", () => {
+        listContainer.removeChild(viewModal);
+    });
+}
 
 
