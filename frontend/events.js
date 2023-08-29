@@ -43,15 +43,21 @@ confirmBtn.addEventListener('click', () => {
 
     const requestBody = {
         query: `
-            mutation{
-                createEvent(eventInput: {title: "${title}",description:"${description}",price:${price},date:"${date}"}){
+            mutation CreateEvent($title: String!, $desc: String!, $price: Float!, $date: String!){
+                createEvent(eventInput: {title: $title,description:$desc,price:$price,date:$date}){
                     _id
                     title
                     description
                     date
                     price
                 }
-            }`
+            }`,
+            variables:{
+                title: title,
+                desc: description,
+                price: price,
+                date: date
+            }
     };
 
     const token = localStorage.getItem('token');
@@ -190,13 +196,16 @@ const openViewModal = (event) => {
         }
         const bookBody = {
             query: `
-            mutation{
-                bookEvent(eventId:"${parsed._id}"){
+            mutation BookEvent($id:ID!) {
+                bookEvent(eventId:$id){
                     _id
                     createdAt
                     updatedAt
                 }
-            }`
+            }`,
+            variables: {
+                id: parsed._id
+            }
         };
 
         fetch('http://localhost:3003/graphql', {

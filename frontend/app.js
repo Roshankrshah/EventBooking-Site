@@ -18,24 +18,32 @@ form.addEventListener('submit', (e) => {
     }
     let requestBody = {
         query: `
-            query{
-                login(email: "${email}", password: "${password}"){
+            query Login($email: String!, $password: String!) {
+                login(email: $email, password: $password){
                     userId
                     token
                     tokenExpiration
                 }
-            }`
+            }`,
+            variables:{
+                email: email,
+                password: password
+            }
     };
 
     if (loginForm === null) {
         requestBody = {
             query: `
-            mutation {
-                createUser(userInput:{email:"${email}",password:"${password}"}){
+            mutation CreateUser($email: String!, $password: String!){
+                createUser(userInput:{email:$email,password:$password}){
                     _id
                     email
                 }
-            }`
+            }`,
+            variables:{
+                email: email,
+                password: password
+            }
         }
     }
 
@@ -54,11 +62,18 @@ form.addEventListener('submit', (e) => {
         })
         .then(resData => {
             console.log(resData);
-            localStorage.setItem('token', resData.data.login.token);
-            localStorage.setItem('userId', resData.data.login.userId);
-            localStorage.setItem('tokenExpiration',resData.data.login.tokenExpiration);
-
-            window.location.replace("http://127.0.0.1:5500/frontend/events.html");
+            if(loginForm){
+                localStorage.setItem('token', resData.data.login.token);
+                localStorage.setItem('userId', resData.data.login.userId);
+                localStorage.setItem('tokenExpiration',resData.data.login.tokenExpiration);
+                window.location.replace("http://127.0.0.1:5500/frontend/events.html");
+            }else{
+                if(resData.data.createUser)
+                    alert('User Created, Now you can Login');
+                else{
+                    alert('User Already Exist,You can Login');
+                }
+            }
         })
         .catch(err => {
             console.log(err);

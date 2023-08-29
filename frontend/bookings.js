@@ -62,12 +62,15 @@ const deleteBooking = bookingId => {
     console.log(bookingId);
     const deleteBody = {
         query: `
-            mutation{
-                cancelBooking(bookingId: "${bookingId}"){
+            mutation CancelBooking($id: ID!) {
+                cancelBooking(bookingId: $id){
                     _id
                     title
                 }
-            }`
+            }`,
+        variables:{
+            id: bookingId
+        }
     };
 
     fetch('http://localhost:3003/graphql', {
@@ -86,9 +89,9 @@ const deleteBooking = bookingId => {
         })
         .then(resData => {
             console.log(resData);
+            location.reload();
         })
         .catch(err => {
             console.log(err);
         })
-    location.reload();
 }
