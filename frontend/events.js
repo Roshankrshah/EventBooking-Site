@@ -90,6 +90,7 @@ confirmBtn.addEventListener('click', () => {
                 <button class="viewbtn"> View Details</button>
             </div>`;
             listContainer.appendChild(listEle);
+            location.reload();
         })
         .catch(err => {
             console.log(err);
