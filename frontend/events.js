@@ -16,7 +16,7 @@ const confirmBtn = document.querySelector(".confirm-btn");
 
 logoutBtn.addEventListener('click', () => {
     localStorage.clear();
-    window.location.replace("http://127.0.0.1:5500/frontend/login.html");
+    window.location.replace("/frontend/login.html");
 });
 
 btn.addEventListener('click', () => {

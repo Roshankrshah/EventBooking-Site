@@ -66,7 +66,7 @@ form.addEventListener('submit', (e) => {
                 localStorage.setItem('token', resData.data.login.token);
                 localStorage.setItem('userId', resData.data.login.userId);
                 localStorage.setItem('tokenExpiration',resData.data.login.tokenExpiration);
-                window.location.replace("http://127.0.0.1:5500/frontend/events.html");
+                window.location.replace("/frontend/events.html");
             }else{
                 if(resData.data.createUser)
                     alert('User Created, Now you can Login');
